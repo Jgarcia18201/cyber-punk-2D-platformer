@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     }
 
         public void TakeDamage(int damage){
-        //DroneMovement.moveSpeed = 0f;
+        moveSpeed = 0f;
         currentHealth -= damage;
         enemyAnim.SetTrigger("Hurt");
 
@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-        void OnTriggerExit2D(Collider2D other){
+    void OnTriggerExit2D(Collider2D other){
         moveSpeed = -moveSpeed;
         FlipEnemyFacing();
     }

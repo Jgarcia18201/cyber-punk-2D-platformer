@@ -21,13 +21,15 @@ public class PlayerMovement : MonoBehaviour
 
     public bool Grounded;
     private bool canJump;
+
+    bool isAlive = true;
     
     [Header("Dash variables")]
     public float dashForce;
     public float startDashCoolDown;
     private float currentDashCoolDown;
     private float dashDirection;
-    private bool isDashing;
+    private bool isDashing = false;
 
     [SerializeField] private LayerMask GroundLayerMask;
     [SerializeField] float runSpeed = 10f;
@@ -46,9 +48,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive) {return;}
         Run();
         FlipSprite();
         CheckIfCanJump();
+        Dead();
 
         movX = Input.GetAxis("Horizontal");
 
@@ -78,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
     //This is function to move left & right
 
     void OnMove(InputValue value){
+        if (!isAlive) {return;}
         moveInput = value.Get<Vector2>();
         Debug.Log(moveInput);
     }
@@ -90,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
         /*if(!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             return;
         }*/
+        if (!isAlive) {return;}
         if (canJump && Input.GetKeyDown(KeyCode.Space)){
             myRb.velocity = Vector2.up * jumpSpeed;
             numberOfJumpsLeft--;
@@ -152,6 +158,13 @@ public class PlayerMovement : MonoBehaviour
             canJump = false;
         } else {
             canJump = true;
+        }
+    }
+
+    void Dead(){
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies"))){
+           //isAlive = false;
+           //myAnimator.SetTrigger("Death");
         }
     }
 
